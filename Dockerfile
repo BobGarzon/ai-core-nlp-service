@@ -18,4 +18,4 @@ ENV PORT 8050
 
 EXPOSE $PORT
 
-CMD java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLP -username corenlp -password P@$$w0rd
+CMD java -Xmx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -username corenlp -password P@$$w0rid -timeout 15000
