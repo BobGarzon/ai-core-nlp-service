@@ -1,13 +1,3 @@
-MAINTAINER Moti Zilberman <motiz88@gmail.com>
-COPY /stanford-corenlp-full-2018-02-27 /stanford-corenlp-full-2018-02-27
-WORKDIR stanford-corenlp-full-2018-02-27
-
-RUN export CLASSPATH="`find . -name '*.jar'`"
-
-ENV PORT 9000
-
-EXPOSE 9000
-USAL0064:nlptest rplahn$ cat Dockerfile
 FROM java:jre-alpine
 
 MAINTAINER Moti Zilberman <motiz88@gmail.com>
