@@ -14,7 +14,7 @@ WORKDIR stanford-corenlp-full-2018-02-27
 
 RUN export CLASSPATH="`find . -name '*.jar'`"
 
-ENV PORT 9000
+ENV PORT 8050 
 
 EXPOSE $PORT
 
