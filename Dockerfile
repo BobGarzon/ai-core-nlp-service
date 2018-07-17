@@ -1,21 +1,21 @@
-FROM java:jre-alpine
-
 MAINTAINER Moti Zilberman <motiz88@gmail.com>
-
-RUN apk add --update --no-cache \
-	 unzip \
-	 wget
-
-RUN wget http://nlp.stanford.edu/software/stanford-corenlp-full-2018-02-27.zip
-RUN unzip stanford-corenlp-full-2018-02-27.zip && \
-	rm stanford-corenlp-full-2018-02-27.zip
-
+COPY /stanford-corenlp-full-2018-02-27 /stanford-corenlp-full-2018-02-27
 WORKDIR stanford-corenlp-full-2018-02-27
 
 RUN export CLASSPATH="`find . -name '*.jar'`"
 
-ENV PORT 8050 
+ENV PORT 9000
 
-EXPOSE $PORT
+EXPOSE 9000
+USAL0064:nlptest rplahn$ cat Dockerfile
+FROM java:jre-alpine
 
-CMD java -Xmx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer --add-modules java.se.ee -username corenlp -password P@$$w0rid -timeout 15000
+MAINTAINER Moti Zilberman <motiz88@gmail.com>
+COPY /stanford-corenlp-full-2018-02-27 /stanford-corenlp-full-2018-02-27
+WORKDIR stanford-corenlp-full-2018-02-27
+
+RUN export CLASSPATH="`find . -name '*.jar'`"
+
+ENV PORT 9000
+
+EXPOSE 9000
