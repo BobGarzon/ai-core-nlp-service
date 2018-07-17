@@ -9,3 +9,5 @@ RUN export CLASSPATH="`find . -name '*.jar'`"
 ENV PORT 9000
 
 EXPOSE 9000
+
+CMD java -Xmx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer --add-modules java.se.ee -timeout 15000
