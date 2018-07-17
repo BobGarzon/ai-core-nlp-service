@@ -18,4 +18,4 @@ ENV PORT 9000
 
 EXPOSE $PORT
 
-CMD java -mx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLP -username corenlp -password P@$$w0rd
+CMD java -mx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLP -username corenlp -password P@$$w0rd
