@@ -1,16 +1,16 @@
-FROM java:jre-alpine
+FROM openjdk:11-jre
 
 MAINTAINER Moti Zilberman <motiz88@gmail.com>
 
-RUN apk add --update --no-cache \
+RUN apt-get update && apt-get install -y --no-install-recommends \
 	 unzip \
 	 wget
 
-RUN wget http://nlp.stanford.edu/software/stanford-corenlp-full-2018-02-27.zip
-RUN unzip stanford-corenlp-full-2018-02-27.zip && \
-	rm stanford-corenlp-full-2018-02-27.zip
+RUN wget http://nlp.stanford.edu/software/stanford-corenlp-full-2018-10-05.zip
+RUN unzip stanford-corenlp-full-2018-10-05.zip && \
+	rm stanford-corenlp-full-2018-10-05.zip
 
-WORKDIR stanford-corenlp-full-2018-02-27
+WORKDIR stanford-corenlp-full-2018-10-05
 
 RUN export CLASSPATH="`find . -name '*.jar'`"
 
