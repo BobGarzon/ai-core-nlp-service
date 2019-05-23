@@ -1,6 +1,6 @@
 FROM openjdk:11-jre
-
-MAINTAINER Moti Zilberman <motiz88@gmail.com>
+  
+LABEL Maintainer="Moti Zilberman <motiz88@gmail.com>"
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
 	 unzip \
@@ -14,8 +14,8 @@ WORKDIR stanford-corenlp-full-2018-10-05
 
 RUN export CLASSPATH="`find . -name '*.jar'`"
 
-ENV PORT 8050 
+ENV PORT 9000
 
-EXPOSE $PORT
+EXPOSE 9000
 
-CMD java -Xmx4g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer --add-modules java.se.ee -username corenlp -password P@$$w0rid -timeout 15000
+CMD java -mx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators 'tokenize,ssplit,pos,lemma,ner,regexner' -port 9000 -username corenlp -password DatasiteOne -timeout 315000 -regexner.mapping -quite
