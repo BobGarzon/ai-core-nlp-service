@@ -18,4 +18,4 @@ ENV PORT 9000
 
 EXPOSE 9000
 
-CMD java -mx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators 'tokenize,ssplit,pos,lemma,ner,regexner' -port 9000 -username corenlp -password DatasiteOne -timeout 315000 -regexner.mapping -quiet
+CMD java -mx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators 'tokenize,ssplit,pos,lemma,ner,regexner' -port 9000 -username corenlp -password DatasiteOne -timeout 315000 -regexner.mapping -quiet -threads 4
