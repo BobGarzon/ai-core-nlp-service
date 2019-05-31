@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Pod
+spec:
+  containers:
+  - name: cfoundry
+    image: merrillcorporation/docker-cicd-pcf:6.41.0
+    alwaysPullImage: true
+    command:
+    - cat
+    tty: true
+  - name: kaniko
+    image: merrillcorporation/kaniko-executor:debug
+    alwaysPullImage: true
+    command:
+    - cat
+    tty: true

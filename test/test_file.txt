@@ -1,0 +1,9 @@
+This is a simple test of the NER written by Devin Bjelland on 2019-05-28.
+Here is some data: 
+It costs $15.03 
+My phone number is 235-85-9389 also written as 1-2345678 
+my postal code is 55104  
+and my phone is 123 123 1234  
+finally my email address is oo12@foo.edu
+my zip code is 12345-6789
+this is quite different from british zip codes which are written AA9A 9AA

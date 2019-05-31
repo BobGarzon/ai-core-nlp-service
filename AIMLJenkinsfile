@@ -1,0 +1,91 @@
+pipeline {
+
+    environment {
+        PCF_DEV = credentials('dev-pcf-deploy')
+        PCF_PROD = credentials('prod-pcf-deploy')
+        ACR = credentials('mrll-acr')
+    }
+    
+    parameters {
+        choice(choices: ['build', 'deployToDev', 'deployToStage', 'deployToProd'], description: 'Target environment for deployment', name: 'TAKE_ACTION')
+        string(description: 'Docker tag to build or deploy', name: 'TAG')
+    }
+
+    agent{
+        kubernetes{
+        label 'aiml-pod'
+        defaultContainer 'cfoundry'
+        yamlFile 'PodTemplate.yml'
+        }
+    }
+    stages {
+        stage('Building core nlp' ) {
+            when {
+                expression { params.TAKE_ACTION == 'build' }
+            }
+            steps {
+                container(name: 'kaniko', shell: '/busybox/sh') {
+                    script {
+                        sh '''#!/busybox/sh
+                        echo "{\\"auths\\":{\\"mrllus2cbacr.azurecr.io\\":{\\"username\\":\\"$ACR_USR\\",\\"password\\":\\"$ACR_PSW\\"}}}" > /kaniko/.docker/config.json
+                        /kaniko/executor --dockerfile=Dockerfile --context=$(pwd) --destination=mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --cache=true
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploying to core nlp to dev') {
+            when {
+                expression { params.TAKE_ACTION == 'deployToDev' }
+            }
+            steps {
+                script {
+                    sh "cf login -a https://api.sys.us2.devb.foundry.mrll.com -u $PCF_DEV_USR -p $PCF_DEV_PSW -o us2-datasiteone -s devb --skip-ssl-validation"
+                    sh "CF_DOCKER_PASSWORD=$ACR_PSW cf push core-nlp-service -n core-nlp-service -i 2 --docker-image mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --docker-username $ACR_USR -m 8000MB -k 2GB"
+                
+                }
+            }
+        }
+        
+        stage('Deploying to core nlp to stage') {
+            when {
+                expression { params.TAKE_ACTION == 'deployToStage' }
+            }
+            steps {
+                script {
+                    sh "cf login -a https://api.sys.us2.devb.foundry.mrll.com -u $PCF_DEV_USR -p $PCF_DEV_PSW -o us2-datasiteone -s stageb --skip-ssl-validation"
+                    sh "CF_DOCKER_PASSWORD=$ACR_PSW cf push core-nlp-service -n core-nlp-service-stage -i 2 --docker-image mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --docker-username $ACR_USR -m 8000MB -k 2GB"
+                
+                }
+            }
+        }
+        
+        stage('Deploying to core nlp to prod US') {
+            when {
+                expression { params.TAKE_ACTION == 'deployToProd' }
+            }
+            steps {
+                script {
+                    sh "cf login -a https://api.sys.us2.prodb.foundry.mrll.com -u $PCF_PROD_USR -p $PCF_PROD_PSW -o us2-datasiteone -s prodb --skip-ssl-validation"
+                    sh "CF_DOCKER_PASSWORD=$ACR_PSW cf push core-nlp-service -n core-nlp-service-prod -i 6 --docker-image mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --docker-username $ACR_USR -m 8000MB -k 2GB"
+                    
+                }
+            }
+        }
+
+        stage('Deploying to core nlp to prod EU') {
+            when {
+                expression { params.TAKE_ACTION == 'deployToProd' }
+            }
+            steps {
+                script {
+                    sh "cf login -a https://api.sys.eu2.prodb.foundry.mrll.com -u $PCF_PROD_USR -p $PCF_PROD_PSW -o eu2-datasiteone -s prodb --skip-ssl-validation"
+                    sh "CF_DOCKER_PASSWORD=$ACR_PSW cf push core-nlp-service -n core-nlp-service-prod -i 6 --docker-image mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --docker-username $ACR_USR -m 8000MB -k 2GB"
+                    
+                }
+            }
+        }
+    }
+}
+

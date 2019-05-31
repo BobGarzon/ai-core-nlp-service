@@ -10,7 +10,9 @@ RUN wget http://nlp.stanford.edu/software/stanford-corenlp-full-2018-10-05.zip
 RUN unzip stanford-corenlp-full-2018-10-05.zip && \
 	rm stanford-corenlp-full-2018-10-05.zip
 
-WORKDIR stanford-corenlp-full-2018-10-05
+WORKDIR /stanford-corenlp-full-2018-10-05
+
+ADD ./data /opt/data
 
 RUN export CLASSPATH="`find . -name '*.jar'`"
 
@@ -18,4 +20,12 @@ ENV PORT 9000
 
 EXPOSE 9000
 
-CMD java -mx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer -annotators 'tokenize,ssplit,pos,lemma,ner,regexner' -port 9000 -username corenlp -password DatasiteOne -timeout 315000 -regexner.mapping -quiet -threads 4
+CMD java -mx8g -cp "*" edu.stanford.nlp.pipeline.StanfordCoreNLPServer \
+	-annotators 'tokenize,ssplit,pos,lemma,ner' \
+	-serverProperties /opt/data/default.properties \
+	-port 9000 \
+	-username corenlp \
+	-password DatasiteOne \
+	-timeout 315000 \
+	-threads 4 \
+	-quiet
