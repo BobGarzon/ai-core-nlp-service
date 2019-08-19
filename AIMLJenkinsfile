@@ -41,7 +41,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh "cf login -a https://api.sys.us2.devb.foundry.mrll.com -u $PCF_DEV_USR -p $PCF_DEV_PSW -o us2-datasiteone -s devb --skip-ssl-validation"
+                    sh "cf login -a https://api.sys.us2.devg.foundry.mrll.com -u $PCF_DEV_USR -p $PCF_DEV_PSW -o us2-datasiteone -s devg --skip-ssl-validation"
                     sh "CF_DOCKER_PASSWORD=$ACR_PSW cf push core-nlp-service -n core-nlp-service -i 2 --docker-image mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --docker-username $ACR_USR -m 8000MB -k 2GB"
                 
                 }
@@ -54,7 +54,7 @@ pipeline {
             }
             steps {
                 script {
-                    sh "cf login -a https://api.sys.us2.devb.foundry.mrll.com -u $PCF_DEV_USR -p $PCF_DEV_PSW -o us2-datasiteone -s stageb --skip-ssl-validation"
+                    sh "cf login -a https://api.sys.us2.devg.foundry.mrll.com -u $PCF_DEV_USR -p $PCF_DEV_PSW -o us2-datasiteone -s stageg --skip-ssl-validation"
                     sh "CF_DOCKER_PASSWORD=$ACR_PSW cf push core-nlp-service -n core-nlp-service-stage -i 2 --docker-image mrllus2cbacr.azurecr.io/core-nlp-service:$TAG --docker-username $ACR_USR -m 8000MB -k 2GB"
                 
                 }
